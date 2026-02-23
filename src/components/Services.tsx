@@ -1,0 +1,190 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { Shield, Smartphone, Globe, BarChart3, ChevronRight, Activity, Zap, Server, Database, Code, Cpu, Link, Layers } from "lucide-react";
+import { motion } from "framer-motion";
+import { supabase } from "@/lib/supabase";
+
+// Map string names to Lucide components
+const iconMap: any = {
+    Shield, Smartphone, Globe, BarChart3, Activity, Zap, Server, Database, Code, Cpu, Link, Layers
+};
+
+export default function Services() {
+    const [services, setServices] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [config, setConfig] = useState({
+        title_main: "Servicios",
+        title_highlight: "GUia",
+        description: "Soluciones de ingeniería de datos y algoritmos avanzados diseñados para elevar la eficiencia operativa y el estándar de cuidado.",
+        card_cta: "Explorar"
+    });
+
+    useEffect(() => {
+        const fetchServices = async () => {
+            try {
+                // Fetch Section Config
+                const { data: sectionData } = await supabase
+                    .from("sections")
+                    .select("*")
+                    .eq("name", "services")
+                    .single();
+
+                if (sectionData) {
+                    setConfig({
+                        title_main: sectionData.title || "Servicios",
+                        title_highlight: sectionData.subtitle || "GUia",
+                        description: config.description,
+                        card_cta: config.card_cta
+                    });
+                }
+
+                const { data, error } = await supabase
+                    .from("services")
+                    .select("*")
+                    .order("order_index", { ascending: true });
+
+                console.log('DEBUG [Services.tsx] Data:', data);
+                console.log('DEBUG [Services.tsx] Error:', error);
+
+                if (data && data.length > 0) {
+                    setServices(data);
+                } else {
+                    // Fallback to default static services if DB is empty
+                    setServices([
+                        {
+                            title: "Farmaco Vigilancia",
+                            description: "Monitorización avanzada impulsada por GUia para cumplimiento normativo integral en tiempo real.",
+                            icon_name: "Shield",
+                            color: "from-blue-500/20 to-cyan-500/20"
+                        },
+                        {
+                            title: "Patient Pathway",
+                            description: "Optimización de la ruta crítica del paciente mediante algoritmos predictivos de alta precisión.",
+                            icon_name: "Smartphone",
+                            color: "from-cyan-500/20 to-teal-500/20"
+                        },
+                        {
+                            title: "Congress GUia",
+                            description: "Experiencias inmersivas para congresos médicos facilitando el aprendizaje colaborativo global.",
+                            icon_name: "Globe",
+                            color: "from-teal-500/20 to-emerald-500/20"
+                        },
+                        {
+                            title: "GUia-Learning",
+                            description: "Formación de élite asistida por GUia para el perfeccionamiento continuo de profesionales del sector.",
+                            icon_name: "BarChart3",
+                            color: "from-emerald-500/20 to-blue-500/20"
+                        }
+                    ]);
+                }
+
+                // Fetch site config for Services
+                const { data: configData } = await supabase
+                    .from("site_config")
+                    .select("key, value")
+                    .in("key", ["services.title_main", "services.title_highlight", "services.description", "services.card_cta"]);
+
+                if (configData) {
+                    const newConfig = { ...config };
+                    configData.forEach(item => {
+                        if (item.key === "services.title_main") newConfig.title_main = item.value;
+                        if (item.key === "services.title_highlight") newConfig.title_highlight = item.value;
+                        if (item.key === "services.description") newConfig.description = item.value;
+                        if (item.key === "services.card_cta") newConfig.card_cta = item.value;
+                    });
+                    setConfig(newConfig);
+                }
+
+            } catch (error) {
+                console.error("Error fetching services:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchServices();
+    }, []);
+
+    const getIcon = (iconName: string) => {
+        return iconMap[iconName] || Activity;
+    };
+
+    // Helper to generate a gradient based on index if not provided
+    const getGradient = (index: number) => {
+        const gradients = [
+            "from-blue-500/20 to-cyan-500/20",
+            "from-cyan-500/20 to-teal-500/20",
+            "from-teal-500/20 to-emerald-500/20",
+            "from-emerald-500/20 to-blue-500/20",
+            "from-purple-500/20 to-pink-500/20",
+            "from-orange-500/20 to-red-500/20"
+        ];
+        return gradients[index % gradients.length];
+    };
+
+    return (
+        <section id="servicios" className="py-32 relative bg-background-dark overflow-hidden">
+            <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+            <div className="container-custom relative z-10">
+                <div className="max-w-3xl mb-24 text-center lg:text-left mx-auto lg:mx-0">
+                    <motion.h2
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="text-4xl sm:text-6xl font-black text-white mb-8 outfit uppercase tracking-tighter"
+                    >
+                        {config.title_main} <span className="text-primary italic">{config.title_highlight}</span>
+                    </motion.h2>
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.2 }}
+                        className="text-xl text-slate-400 leading-relaxed font-light"
+                    >
+                        {config.description}
+                    </motion.p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+                    {services.map((service, idx) => {
+                        const IconComponent = getIcon(service.icon_name);
+                        const gradient = service.color || getGradient(idx);
+
+                        return (
+                            <motion.div
+                                key={idx}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: idx * 0.1 }}
+                                className="group relative bg-slate-900/40 border border-white/5 rounded-[2.5rem] p-10 glow-border overflow-hidden flex flex-col items-center lg:items-start text-center lg:text-left hover:bg-slate-900/60 transition-colors"
+                            >
+                                <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
+
+                                <div className="relative z-10 w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-8 group-hover:scale-110 transition-transform overflow-hidden">
+                                    {service.image_url ? (
+                                        <img src={service.image_url} alt={service.title} className="w-full h-full object-cover" />
+                                    ) : (
+                                        <IconComponent className="w-8 h-8" />
+                                    )}
+                                </div>
+
+                                <h3 className="relative z-10 text-2xl font-bold text-white mb-4 outfit">{service.title}</h3>
+                                <p className="relative z-10 text-slate-400 text-sm leading-relaxed mb-8 font-light">
+                                    {service.desc || service.description}
+                                </p>
+
+                                <button className="relative z-10 mt-auto text-primary text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 group/btn">
+                                    {config.card_cta} <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                                </button>
+                            </motion.div>
+                        );
+                    })}
+                </div>
+            </div>
+        </section>
+    );
+}
