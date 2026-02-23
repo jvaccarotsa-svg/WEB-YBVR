@@ -1,29 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { supabase } from "@/lib/supabase";
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-    if (!supabaseUrl || !supabaseKey) {
-        return NextResponse.json(
-            { error: "Variables de entorno NEXT_PUBLIC_SUPABASE_URL o NEXT_PUBLIC_SUPABASE_ANON_KEY no encontradas en el servidor" },
-            { status: 500 }
-        );
-    }
-
-    const supabase = createClient(supabaseUrl, supabaseKey);
-
     try {
+        console.log("Login attempt...");
         const { username, password } = await request.json();
 
         if (!username || !password) {
-            return NextResponse.json(
-                { error: "Usuario y contraseña son obligatorios" },
-                { status: 400 }
-            );
+            return NextResponse.json({ error: "Faltan credenciales" }, { status: 400 });
         }
 
         // Verify credentials using the RPC function (uses pgcrypto crypt())
