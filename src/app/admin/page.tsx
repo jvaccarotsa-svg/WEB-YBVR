@@ -32,25 +32,6 @@ export default function AdminDashboard() {
     // Status message for feedback
     const [status, setStatus] = useState({ type: "", message: "" });
 
-    // Auth guard
-    useEffect(() => {
-        if (!authLoading && !isAuthenticated) {
-            router.push("/admin/login");
-        }
-    }, [authLoading, isAuthenticated, router]);
-
-    if (authLoading) {
-        return (
-            <div className="flex min-h-screen items-center justify-center bg-slate-950">
-                <Loader2 className="w-10 h-10 text-primary animate-spin" />
-            </div>
-        );
-    }
-
-    if (!isAuthenticated) {
-        return null;
-    }
-
     // Hero Data State
     const [heroSection, setHeroSection] = useState({ id: "", title: "", subtitle: "" });
     const [carouselItems, setCarouselItems] = useState<any[]>([]);
@@ -79,6 +60,25 @@ export default function AdminDashboard() {
     useEffect(() => {
         fetchData();
     }, [activeTab]);
+
+    // Auth guard
+    useEffect(() => {
+        if (!authLoading && !isAuthenticated) {
+            router.push("/admin/login");
+        }
+    }, [authLoading, isAuthenticated, router]);
+
+    if (authLoading) {
+        return (
+            <div className="flex min-h-screen items-center justify-center bg-slate-950">
+                <Loader2 className="w-10 h-10 text-primary animate-spin" />
+            </div>
+        );
+    }
+
+    if (!isAuthenticated) {
+        return null;
+    }
 
     const fetchData = async () => {
         setLoading(true);
