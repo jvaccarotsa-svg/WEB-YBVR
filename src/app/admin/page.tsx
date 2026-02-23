@@ -239,7 +239,7 @@ export default function AdminDashboard() {
             if (sectionError) throw sectionError;
 
             // 2. Clear and insert items
-            const { error: deleteError } = await supabase.from("services").delete().neq("id", "00000000-0000-0000-0000-000000000000");
+            const { error: deleteError } = await supabase.from("services").delete().neq("id", -1);
             if (deleteError) throw deleteError;
 
             if (services.length > 0) {
