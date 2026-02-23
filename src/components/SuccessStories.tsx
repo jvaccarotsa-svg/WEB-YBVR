@@ -75,6 +75,12 @@ export default function SuccessStories() {
         fetchData();
     }, []);
 
+    useEffect(() => {
+        if (stories.length > 0 && currentIndex >= stories.length) {
+            setCurrentIndex(0);
+        }
+    }, [stories, currentIndex]);
+
     const next = () => {
         if (stories.length === 0) return;
         setCurrentIndex((prev) => (prev + 1) % stories.length);
