@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 import {
     LayoutDashboard,
     Image as ImageIcon,
@@ -20,12 +22,34 @@ import { supabase } from "@/lib/supabase";
 import ImageUpload from "@/components/admin/ImageUpload";
 
 export default function AdminDashboard() {
+    const { user, isAuthenticated, isLoading: authLoading, logout } = useAuth();
+    const router = useRouter();
+
     const [activeTab, setActiveTab] = useState("hero");
     const [loading, setLoading] = useState(false);
     const [saving, setSaving] = useState(false);
 
     // Status message for feedback
     const [status, setStatus] = useState({ type: "", message: "" });
+
+    // Auth guard
+    useEffect(() => {
+        if (!authLoading && !isAuthenticated) {
+            router.push("/admin/login");
+        }
+    }, [authLoading, isAuthenticated, router]);
+
+    if (authLoading) {
+        return (
+            <div className="flex min-h-screen items-center justify-center bg-slate-950">
+                <Loader2 className="w-10 h-10 text-primary animate-spin" />
+            </div>
+        );
+    }
+
+    if (!isAuthenticated) {
+        return null;
+    }
 
     // Hero Data State
     const [heroSection, setHeroSection] = useState({ id: "", title: "", subtitle: "" });
@@ -404,7 +428,13 @@ export default function AdminDashboard() {
                 </nav>
 
                 <div className="p-4 border-t border-slate-800">
-                    <button className="w-full flex items-center gap-4 px-4 py-3 text-slate-400 hover:text-red-400 hover:bg-red-400/5 rounded-xl transition-all">
+                    {user && (
+                        <p className="px-4 mb-2 text-xs text-slate-600 truncate">{user.display_name || user.username}</p>
+                    )}
+                    <button
+                        onClick={logout}
+                        className="w-full flex items-center gap-4 px-4 py-3 text-slate-400 hover:text-red-400 hover:bg-red-400/5 rounded-xl transition-all"
+                    >
                         <LogOut className="w-5 h-5" />
                         <span className="font-medium text-sm">Cerrar Sesión</span>
                     </button>
