@@ -57,29 +57,6 @@ export default function AdminDashboard() {
         { id: "config", label: "Configuración", icon: Settings },
     ];
 
-    useEffect(() => {
-        fetchData();
-    }, [activeTab]);
-
-    // Auth guard
-    useEffect(() => {
-        if (!authLoading && !isAuthenticated) {
-            router.push("/admin/login");
-        }
-    }, [authLoading, isAuthenticated, router]);
-
-    if (authLoading) {
-        return (
-            <div className="flex min-h-screen items-center justify-center bg-slate-950">
-                <Loader2 className="w-10 h-10 text-primary animate-spin" />
-            </div>
-        );
-    }
-
-    if (!isAuthenticated) {
-        return null;
-    }
-
     const fetchData = async () => {
         setLoading(true);
         try {
@@ -129,6 +106,29 @@ export default function AdminDashboard() {
         }
         setLoading(false);
     };
+
+    useEffect(() => {
+        fetchData();
+    }, [activeTab]);
+
+    // Auth guard
+    useEffect(() => {
+        if (!authLoading && !isAuthenticated) {
+            router.push("/admin/login");
+        }
+    }, [authLoading, isAuthenticated, router]);
+
+    if (authLoading) {
+        return (
+            <div className="flex min-h-screen items-center justify-center bg-slate-950">
+                <Loader2 className="w-10 h-10 text-primary animate-spin" />
+            </div>
+        );
+    }
+
+    if (!isAuthenticated) {
+        return null;
+    }
 
     const handleSaveHero = async () => {
         setSaving(true);
