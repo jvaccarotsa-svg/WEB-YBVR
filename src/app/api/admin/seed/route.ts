@@ -1,13 +1,25 @@
-
 import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
+export const dynamic = 'force-dynamic';
 
-// Initialize Supabase client
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabase = createClient(supabaseUrl, supabaseKey);
+// Initialize Supabase client safely
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+// Only create the client if we have the required environment variables
+const supabase = (supabaseUrl && supabaseKey)
+    ? createClient(supabaseUrl, supabaseKey)
+    : null;
 
 export async function GET() {
+    if (!supabase) {
+        console.error("Supabase environment variables are missing. Seeding skipped.");
+        return NextResponse.json(
+            { error: "Supabase environment variables are missing. Please configure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in Vercel." },
+            { status: 500 }
+        );
+    }
+
     try {
         console.log("Starting database seeding...");
 
