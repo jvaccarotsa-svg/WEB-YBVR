@@ -21,14 +21,14 @@ export async function POST(request: NextRequest) {
         if (error) {
             console.error("RPC error:", error);
             return NextResponse.json(
-                { error: "Error al verificar credenciales" },
+                { error: `Error de BD: ${error.message}` },
                 { status: 500 }
             );
         }
 
         if (!users || users.length === 0) {
             return NextResponse.json(
-                { error: "Usuario o contraseña incorrectos" },
+                { error: "Usuario o contraseña no coinciden" },
                 { status: 401 }
             );
         }
