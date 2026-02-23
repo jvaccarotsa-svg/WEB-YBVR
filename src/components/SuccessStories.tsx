@@ -126,10 +126,7 @@ export default function SuccessStories() {
                             viewport={{ once: true }}
                             className="text-4xl sm:text-6xl font-black text-white mb-6 outfit tracking-tighter uppercase"
                         >
-                            {config.title_part1} <span className="font-black">
-                                <span className="text-white">GU</span>
-                                <span className="text-primary italic lowercase">ia</span>
-                            </span>
+                            {config.title_part1} <span className="text-primary italic lowercase">{config.title_highlight}</span>
                         </motion.h2>
                         <p className="text-lg text-slate-400 font-light max-w-xl mx-auto lg:mx-0">
                             {config.description}
