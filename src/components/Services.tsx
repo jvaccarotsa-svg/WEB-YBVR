@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Shield, Smartphone, Globe, BarChart3, ChevronRight, Activity, Zap, Server, Database, Code, Cpu, Link, Layers } from "lucide-react";
-import { motion } from "framer-motion";
+import { Shield, Smartphone, Globe, BarChart3, ChevronRight, Activity, Zap, Server, Database, Code, Cpu, Link, Layers, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 
 // Map string names to Lucide components
@@ -13,6 +13,9 @@ const iconMap: any = {
 export default function Services() {
     const [services, setServices] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [selectedService, setSelectedService] = useState<any>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     const [config, setConfig] = useState({
         title_main: "Servicios",
         title_highlight: "GUia",
@@ -56,25 +59,29 @@ export default function Services() {
                             title: "Farmaco Vigilancia",
                             description: "Monitorización avanzada impulsada por GUia para cumplimiento normativo integral en tiempo real.",
                             icon_name: "Shield",
-                            color: "from-blue-500/20 to-cyan-500/20"
+                            color: "from-blue-500/20 to-cyan-500/20",
+                            explorar_content: "Detalles completos sobre el sistema de Farmaco Vigilancia impulsado por GUia..."
                         },
                         {
                             title: "Patient Pathway",
                             description: "Optimización de la ruta crítica del paciente mediante algoritmos predictivos de alta precisión.",
                             icon_name: "Smartphone",
-                            color: "from-cyan-500/20 to-teal-500/20"
+                            color: "from-cyan-500/20 to-teal-500/20",
+                            explorar_content: "Detalles completos sobre Patient Pathway..."
                         },
                         {
                             title: "Congress GUia",
                             description: "Experiencias inmersivas para congresos médicos facilitando el aprendizaje colaborativo global.",
                             icon_name: "Globe",
-                            color: "from-teal-500/20 to-emerald-500/20"
+                            color: "from-teal-500/20 to-emerald-500/20",
+                            explorar_content: "Detalles completos sobre Congress GUia..."
                         },
                         {
                             title: "GUia-Learning",
                             description: "Formación de élite asistida por GUia para el perfeccionamiento continuo de profesionales del sector.",
                             icon_name: "BarChart3",
-                            color: "from-emerald-500/20 to-blue-500/20"
+                            color: "from-emerald-500/20 to-blue-500/20",
+                            explorar_content: "Detalles completos sobre GUia-Learning..."
                         }
                     ]);
                 }
@@ -121,6 +128,11 @@ export default function Services() {
             "from-orange-500/20 to-red-500/20"
         ];
         return gradients[index % gradients.length];
+    };
+
+    const openModal = (service: any) => {
+        setSelectedService(service);
+        setIsModalOpen(true);
     };
 
     return (
@@ -177,7 +189,10 @@ export default function Services() {
                                     {service.desc || service.description}
                                 </p>
 
-                                <button className="relative z-10 mt-auto text-primary text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 group/btn">
+                                <button
+                                    onClick={() => openModal(service)}
+                                    className="relative z-10 mt-auto text-primary text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 group/btn"
+                                >
                                     {config.card_cta} <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
                                 </button>
                             </motion.div>
@@ -185,6 +200,62 @@ export default function Services() {
                     })}
                 </div>
             </div>
+
+            {/* Modal Detail */}
+            <AnimatePresence>
+                {isModalOpen && selectedService && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-xl flex items-center justify-center p-4 sm:p-10"
+                        onClick={() => setIsModalOpen(false)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                            className="bg-slate-900 border border-white/10 w-full max-w-4xl rounded-[3rem] overflow-hidden shadow-2xl relative"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-transparent via-primary to-transparent opacity-50"></div>
+
+                            <button
+                                className="absolute top-8 right-8 text-white/50 hover:text-white transition-colors bg-white/5 p-2 rounded-xl border border-white/10 hover:border-primary/50"
+                                onClick={() => setIsModalOpen(false)}
+                            >
+                                <X className="w-6 h-6" />
+                            </button>
+
+                            <div className="p-12 sm:p-20">
+                                <div className="flex flex-col md:flex-row gap-12 items-start">
+                                    <div className="w-24 h-24 rounded-3xl bg-primary/10 flex items-center justify-center text-primary flex-shrink-0 shadow-[0_0_30px_rgba(0,224,255,0.2)]">
+                                        {selectedService.image_url ? (
+                                            <img src={selectedService.image_url} alt={selectedService.title} className="w-full h-full object-cover rounded-3xl" />
+                                        ) : (
+                                            (() => {
+                                                const Icon = getIcon(selectedService.icon_name);
+                                                return <Icon className="w-12 h-12" />;
+                                            })()
+                                        )}
+                                    </div>
+                                    <div className="flex-1">
+                                        <h2 className="text-4xl lg:text-6xl font-black text-white outfit uppercase mb-6 tracking-tighter">
+                                            {selectedService.title}
+                                        </h2>
+                                        <div className="w-20 h-1 bg-primary mb-10 rounded-full opacity-50"></div>
+                                        <div className="prose prose-invert max-w-none">
+                                            <p className="text-xl text-slate-300 font-light leading-relaxed whitespace-pre-wrap">
+                                                {selectedService.explorar_content || selectedService.description || selectedService.desc || "Explora las capacidades avanzadas de este servicio diseñado por GUia para revolucionar la atención médica."}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </section>
     );
 }

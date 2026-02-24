@@ -176,6 +176,7 @@ CREATE TABLE IF NOT EXISTS public.services (
     description TEXT,
     icon_name TEXT,
     image_url TEXT,
+    explorar_content TEXT,
     link TEXT,
     order_index INTEGER DEFAULT 0,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())

@@ -58,47 +58,53 @@ export default function AdminDashboard() {
     ];
 
     const fetchData = async () => {
+        console.log('DEBUG: fetchData started for tab:', activeTab);
         setLoading(true);
         try {
             if (activeTab === "hero") {
-                const { data: section } = await supabase.from("sections").select("*").eq("name", "hero").single();
+                const { data: section, error: sectionErr } = await supabase.from("sections").select("*").eq("name", "hero").single();
+                if (sectionErr) console.warn('DEBUG: Section hero fetch error:', sectionErr);
                 if (section) {
                     setHeroSection(section);
-                    const { data: items } = await supabase
+                    const { data: items, error: itemsErr } = await supabase
                         .from("carousel_items")
                         .select("*")
                         .eq("section_id", section.id)
                         .order("order_index", { ascending: true });
+                    if (itemsErr) console.error('DEBUG: Carousel items fetch error:', itemsErr);
                     setCarouselItems(items || []);
-                } else {
-                    console.log("Hero section not found in DB");
                 }
             } else if (activeTab === "stories") {
-                const { data } = await supabase
+                const { data, error } = await supabase
                     .from("success_stories")
                     .select("*")
                     .order("order_index", { ascending: true });
+                if (error) console.error('DEBUG: Stories fetch error:', error);
                 setSuccessStories(data || []);
             } else if (activeTab === "services") {
-                const { data: section } = await supabase.from("sections").select("*").eq("name", "services").single();
+                const { data: section, error: sectionErr } = await supabase.from("sections").select("*").eq("name", "services").single();
+                if (sectionErr) console.warn('DEBUG: Section services fetch error:', sectionErr);
                 if (section) setServicesSection(section);
 
-                const { data } = await supabase
+                const { data, error } = await supabase
                     .from("services")
                     .select("*")
                     .order("order_index", { ascending: true });
+                if (error) console.error('DEBUG: Services fetch error:', error);
                 setServices(data || []);
             } else if (activeTab === "partners") {
-                const { data } = await supabase
+                const { data, error } = await supabase
                     .from("partners")
                     .select("*")
                     .order("created_at", { ascending: true });
+                if (error) console.error('DEBUG: Partners fetch error:', error);
                 setPartners(data || []);
             } else if (activeTab === "config") {
-                const { data } = await supabase
+                const { data, error } = await supabase
                     .from("site_config")
                     .select("*")
                     .order("section", { ascending: true });
+                if (error) console.error('DEBUG: Config fetch error:', error);
                 setConfig(data || []);
             }
         } catch (error) {
@@ -108,6 +114,7 @@ export default function AdminDashboard() {
     };
 
     useEffect(() => {
+        console.log('DEBUG: useEffect triggered for activeTab:', activeTab);
         fetchData();
     }, [activeTab]);
 
@@ -127,8 +134,11 @@ export default function AdminDashboard() {
     }
 
     if (!isAuthenticated) {
+        console.log('DEBUG: User not authenticated, returning null');
         return null;
     }
+
+    console.log('DEBUG: Rendering AdminDashboard. Tab:', activeTab, 'Services count:', services.length);
 
     const handleSaveHero = async () => {
         setSaving(true);
@@ -248,6 +258,7 @@ export default function AdminDashboard() {
                     description: item.description,
                     icon_name: item.icon_name,
                     image_url: item.image_url,
+                    explorar_content: item.explorar_content,
                     link: item.link,
                     order_index: index
                 }));
@@ -352,21 +363,25 @@ export default function AdminDashboard() {
                 title: "Farmaco Vigilancia",
                 description: "Monitorización avanzada impulsada por GUia para cumplimiento normativo integral en tiempo real.",
                 icon_name: "Shield",
+                explorar_content: "Nuestro sistema de Farmaco Vigilancia utiliza algoritmos de IA de última generación para procesar reportes de seguridad en tiempo real, garantizando el cumplimiento de las normativas de la EMA y la FDA de forma automática."
             },
             {
                 title: "Patient Pathway",
                 description: "Optimización de la ruta crítica del paciente mediante algoritmos predictivos de alta precisión.",
                 icon_name: "Smartphone",
+                explorar_content: "Patient Pathway analiza el historial clínico y los flujos de trabajo hospitalarios para predecir cuellos de botella y proponer rutas óptimas de tratamiento, mejorando la satisfacción del paciente y la eficiencia clínica."
             },
             {
                 title: "Congress GUia",
                 description: "Experiencias inmersivas para congresos médicos facilitando el aprendizaje colaborativo global.",
                 icon_name: "Globe",
+                explorar_content: "Transformamos los congresos médicos en experiencias interactivas donde los datos cobran vida a través de visualizaciones 3D y asistentes IA que facilitan la conexión entre investigadores y profesionales."
             },
             {
                 title: "GUia-Learning",
                 description: "Formación de élite asistida por GUia para el perfeccionamiento continuo de profesionales del sector.",
                 icon_name: "BarChart3",
+                explorar_content: "Plataforma de formación adaptativa que personaliza el currículo médico basándose en el desempeño del usuario, utilizando simulaciones clínicas avanzadas y feedback inmediato potenciado por GUia."
             }
         ]);
     };
@@ -381,7 +396,7 @@ export default function AdminDashboard() {
     const addStory = () => setSuccessStories([...successStories, { title: "Nuevo Caso", category: "Pharma", image_url: "", video_url: "" }]);
     const removeStory = (index: number) => setSuccessStories(successStories.filter((_, i) => i !== index));
 
-    const addService = () => setServices([...services, { title: "Nuevo Servicio", description: "", icon_name: "Activity", image_url: "" }]);
+    const addService = () => setServices([...services, { title: "Nuevo Servicio", description: "", icon_name: "Activity", image_url: "", explorar_content: "" }]);
     const removeService = (index: number) => setServices(services.filter((_, i) => i !== index));
 
     const addPartner = () => setPartners([...partners, { name: "Nuevo Cliente", logo_url: "", website_url: "" }]);
@@ -705,68 +720,96 @@ export default function AdminDashboard() {
                                         </button>
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-1 gap-6">
-                                    {services.map((service, i) => (
-                                        <div key={i} className="bg-slate-950 border border-slate-800 rounded-2xl p-6 relative group">
-                                            <button
-                                                onClick={() => removeService(i)}
-                                                className="absolute top-4 right-4 text-slate-600 hover:text-red-500 transition-colors"
-                                            >
-                                                <Trash2 className="w-4 h-4" />
-                                            </button>
-                                            <div className="space-y-4">
-                                                {/* Image/Icon Upload */}
-                                                <div className="w-full flex items-center justify-center bg-slate-900 rounded-xl p-4 border border-slate-800">
-                                                    <div className="w-16 h-16">
-                                                        <ImageUpload
-                                                            value={service.image_url}
-                                                            onChange={(url) => {
-                                                                const n = [...services]; n[i].image_url = url; setServices(n);
-                                                            }}
-                                                            className="w-full h-full rounded-lg"
-                                                        />
+                                {services.length === 0 ? (
+                                    <div className="text-center py-20 border-2 border-dashed border-slate-800 rounded-3xl">
+                                        <Briefcase className="w-12 h-12 text-slate-700 mx-auto mb-4" />
+                                        <p className="text-slate-500 font-medium">No se han encontrado servicios.</p>
+                                        <button
+                                            onClick={addService}
+                                            className="mt-4 text-primary font-bold text-sm uppercase tracking-widest hover:underline"
+                                        >
+                                            + Crear el primer servicio
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <div className="grid grid-cols-1 gap-6">
+                                        {services.map((service, i) => (
+                                            <div key={i} className="bg-slate-950 border border-slate-800 rounded-2xl p-6 relative group">
+                                                <button
+                                                    onClick={() => removeService(i)}
+                                                    className="absolute top-4 right-4 text-slate-600 hover:text-red-500 transition-colors"
+                                                >
+                                                    <Trash2 className="w-4 h-4" />
+                                                </button>
+                                                <div className="space-y-4">
+                                                    {/* Image/Icon Upload */}
+                                                    <div className="w-full flex items-center justify-center bg-slate-900 rounded-xl p-4 border border-slate-800">
+                                                        <div className="w-16 h-16">
+                                                            <ImageUpload
+                                                                value={service.image_url}
+                                                                onChange={(url) => {
+                                                                    const n = [...services]; n[i].image_url = url; setServices(n);
+                                                                }}
+                                                                className="w-full h-full rounded-lg"
+                                                            />
+                                                        </div>
+                                                        <div className="ml-4 flex-1">
+                                                            <label className="text-[10px] font-bold text-slate-600 uppercase block mb-1">O usar Icono Lucide</label>
+                                                            <input
+                                                                type="text"
+                                                                placeholder="Ej: Shield, Globe..."
+                                                                value={service.icon_name || ""}
+                                                                onChange={(e) => {
+                                                                    const n = [...services]; n[i].icon_name = e.target.value; setServices(n);
+                                                                }}
+                                                                className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:border-primary outline-none"
+                                                            />
+                                                        </div>
                                                     </div>
-                                                    <div className="ml-4 flex-1">
-                                                        <label className="text-[10px] font-bold text-slate-600 uppercase block mb-1">O usar Icono Lucide</label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder="Ej: Shield, Globe..."
-                                                            value={service.icon_name || ""}
-                                                            onChange={(e) => {
-                                                                const n = [...services]; n[i].icon_name = e.target.value; setServices(n);
-                                                            }}
-                                                            className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:border-primary outline-none"
-                                                        />
-                                                    </div>
-                                                </div>
 
-                                                <div className="grid grid-cols-1 gap-4">
-                                                    <div className="space-y-1">
-                                                        <label className="text-[10px] font-bold text-slate-600 uppercase">Título</label>
-                                                        <input
-                                                            type="text"
-                                                            value={service.title || ""}
-                                                            onChange={(e) => {
-                                                                const n = [...services]; n[i].title = e.target.value; setServices(n);
-                                                            }}
-                                                            className="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:border-primary outline-none"
-                                                        />
+                                                    <div className="grid grid-cols-1 gap-4">
+                                                        <div className="space-y-1">
+                                                            <label className="text-[10px] font-bold text-slate-600 uppercase">Título</label>
+                                                            <input
+                                                                type="text"
+                                                                value={service.title || ""}
+                                                                onChange={(e) => {
+                                                                    const n = [...services]; n[i].title = e.target.value; setServices(n);
+                                                                }}
+                                                                className="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:border-primary outline-none"
+                                                            />
+                                                        </div>
                                                     </div>
                                                 </div>
+                                                <div className="space-y-1">
+                                                    <label className="text-[10px] font-bold text-slate-600 uppercase">Descripción</label>
+                                                    <textarea
+                                                        value={service.description || ""}
+                                                        onChange={(e) => {
+                                                            const n = [...services]; n[i].description = e.target.value; setServices(n);
+                                                        }}
+                                                        className="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:border-primary outline-none min-h-[80px]"
+                                                    />
+                                                </div>
+                                                <div className="space-y-2 mt-6 p-6 border-2 border-primary/30 bg-primary/5 rounded-2xl">
+                                                    <div className="flex items-center gap-2 mb-2">
+                                                        <label className="text-xs font-bold text-primary uppercase tracking-wider">Contenido Detallado del Pop-up</label>
+                                                        <span className="bg-primary text-slate-950 text-[10px] font-black px-2 py-0.5 rounded-full">NUEVO</span>
+                                                    </div>
+                                                    <textarea
+                                                        value={service.explorar_content || ""}
+                                                        onChange={(e) => {
+                                                            const n = [...services]; n[i].explorar_content = e.target.value; setServices(n);
+                                                        }}
+                                                        placeholder="Escribe la información extendida que el usuario verá al hacer clic en 'Explorar'..."
+                                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:border-primary outline-none min-h-[150px] text-slate-200 placeholder:text-slate-600"
+                                                    />
+                                                    <p className="text-[10px] text-slate-500 italic">Este contenido aparecerá en un pop-up de alta gama cuando alguien pulse el botón 'Explorar' en la web.</p>
+                                                </div>
                                             </div>
-                                            <div className="space-y-1">
-                                                <label className="text-[10px] font-bold text-slate-600 uppercase">Descripción</label>
-                                                <textarea
-                                                    value={service.description || ""}
-                                                    onChange={(e) => {
-                                                        const n = [...services]; n[i].description = e.target.value; setServices(n);
-                                                    }}
-                                                    className="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:border-primary outline-none min-h-[80px]"
-                                                />
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                         )}
 
