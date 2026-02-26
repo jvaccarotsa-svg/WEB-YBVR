@@ -123,24 +123,28 @@ export default function Hero() {
                     </motion.div>
 
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
+                        initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 1, ease: "easeOut" }}
-                        className="flex flex-col lg:flex-row items-center justify-center lg:justify-start gap-6 lg:gap-10 mb-12"
+                        transition={{ duration: 1.2, ease: "easeOut" }}
+                        className="inline-flex items-center justify-center lg:justify-start mb-12"
                     >
-                        <div className="relative group">
-                            <div className="absolute -inset-4 bg-primary/20 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div className="glass-capsule group relative flex items-center gap-6 px-8 py-4 rounded-[2rem] bg-white/[0.03] backdrop-blur-2xl border border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.3),0_0_20px_rgba(0,224,255,0.05)] hover:border-primary/30 transition-all duration-500">
+                            {/* Inner Glow */}
+                            <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+
                             <img
                                 src="/logos/ybvr_logo_light.png"
                                 alt="YBVR Logo"
-                                className="h-16 sm:h-20 lg:h-24 w-auto object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.1)] relative z-10"
+                                className="h-10 sm:h-12 w-auto object-contain opacity-90 group-hover:opacity-100 transition-all duration-300"
                             />
+
+                            <div className="h-8 w-px bg-white/10 group-hover:bg-primary/20 transition-colors duration-500"></div>
+
+                            <span className="font-black text-3xl sm:text-4xl lg:text-5xl outfit tracking-[-0.05em] leading-none group-hover:scale-[1.02] transition-transform duration-300">
+                                <span className="text-white">GU</span>
+                                <span className="text-primary italic lowercase">ia</span>
+                            </span>
                         </div>
-                        <div className="h-px w-12 lg:w-px lg:h-16 bg-white/10 hidden sm:block"></div>
-                        <span className="font-black text-5xl sm:text-6xl lg:text-8xl outfit tracking-[-0.05em] leading-none">
-                            <span className="text-white">GU</span>
-                            <span className="text-primary italic lowercase">ia</span>
-                        </span>
                     </motion.div>
 
                     <motion.h1
