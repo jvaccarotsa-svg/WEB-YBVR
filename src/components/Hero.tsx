@@ -158,7 +158,7 @@ export default function Hero() {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.5, duration: 0.8 }}
-                        className="text-4xl sm:text-5xl lg:text-7xl font-black text-white outfit uppercase tracking-tighter leading-[0.9] mb-8 max-w-4xl mx-auto lg:mx-0"
+                        className="text-4xl sm:text-5xl lg:text-6xl font-extrabold pb-2 text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70 outfit uppercase tracking-tight leading-[0.95] mb-8 max-w-4xl mx-auto lg:mx-0"
                     >
                         {slides[currentSlide].title}
                     </motion.h1>
