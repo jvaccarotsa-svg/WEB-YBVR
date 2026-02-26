@@ -111,7 +111,7 @@ export default function Hero() {
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.5 }}
-                        className="inline-flex items-center gap-3 px-4 py-2 rounded-full glass mb-8 border-primary/20"
+                        className="inline-flex items-center gap-3 px-4 py-2 rounded-full glass mb-6 border-primary/20"
                     >
                         <span className="relative flex h-2 w-2">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
@@ -125,8 +125,8 @@ export default function Hero() {
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 1.2, ease: "easeOut" }}
-                        className="inline-flex items-center justify-center lg:justify-start mb-12"
+                        transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
+                        className="flex items-center justify-center lg:justify-start mb-12"
                     >
                         <div className="glass-capsule group relative flex items-center gap-6 px-8 py-4 rounded-[2rem] bg-white/[0.03] backdrop-blur-2xl border border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.3),0_0_20px_rgba(0,224,255,0.05)] hover:border-primary/30 transition-all duration-500">
                             {/* Inner Glow */}
@@ -141,8 +141,8 @@ export default function Hero() {
                             <div className="h-8 w-px bg-white/10 group-hover:bg-primary/20 transition-colors duration-500"></div>
 
                             <span className="font-black text-3xl sm:text-4xl lg:text-5xl outfit tracking-[-0.05em] leading-none group-hover:scale-[1.02] transition-transform duration-300">
-                                <span className="text-white">GU</span>
-                                <span className="text-primary italic lowercase">ia</span>
+                                <span className="text-primary italic lowercase">gu</span>
+                                <span className="text-white uppercase">IA</span>
                             </span>
                         </div>
                     </motion.div>
