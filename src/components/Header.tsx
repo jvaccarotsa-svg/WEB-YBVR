@@ -52,7 +52,7 @@ export default function Header() {
         { label: config.nav_services, href: "#servicios" },
         { label: config.nav_tech, href: "#tecnologia" },
         { label: config.nav_cases, href: "#casos-de-exito" },
-        { label: config.nav_about, href: "#sobre-nosotros" },
+        { label: config.nav_about, href: "https://www.ybvr.com/about", external: true },
     ];
 
     useEffect(() => {
@@ -82,6 +82,8 @@ export default function Header() {
                             <Link
                                 key={link.href}
                                 href={link.href}
+                                target={link.external ? "_blank" : undefined}
+                                rel={link.external ? "noopener noreferrer" : undefined}
                                 className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/60 hover:text-primary transition-all hover:tracking-[0.3em]"
                             >
                                 {link.label}

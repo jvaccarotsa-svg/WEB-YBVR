@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, ArrowDown } from "lucide-react";
 import { supabase } from "@/lib/supabase";
-import AboutModal from "./AboutModal";
 
 export default function Hero() {
     const defaultSlides = [
@@ -29,7 +28,6 @@ export default function Hero() {
         cta_secondary: "Sobre Nosotros",
         scroll_text: "Descubrir"
     });
-    const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
 
     useEffect(() => {
         const fetchSlides = async () => {
@@ -159,17 +157,18 @@ export default function Hero() {
                         <button className="bg-primary text-slate-950 px-12 py-5 rounded-2xl font-black text-sm uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-[0_0_40px_rgba(0,224,255,0.3)] flex items-center justify-center gap-3">
                             {config.cta_primary} <ChevronRight className="w-5 h-5" />
                         </button>
-                        <button
-                            onClick={() => setIsAboutModalOpen(true)}
-                            className="glass text-white px-12 py-5 rounded-2xl font-bold text-sm uppercase tracking-widest hover:bg-white/10 active:scale-95 transition-all border-white/20"
+                        <a
+                            href="https://www.ybvr.com/about"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="glass text-white px-12 py-5 rounded-2xl font-bold text-sm uppercase tracking-widest hover:bg-white/10 active:scale-95 transition-all border-white/20 inline-block text-center flex items-center justify-center"
                         >
                             {config.cta_secondary}
-                        </button>
+                        </a>
                     </motion.div>
                 </div>
             </div >
 
-            <AboutModal isOpen={isAboutModalOpen} onClose={() => setIsAboutModalOpen(false)} />
 
             <motion.div
                 animate={{ y: [0, 10, 0] }}
