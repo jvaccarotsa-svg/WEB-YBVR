@@ -125,43 +125,69 @@ export default function Hero() {
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.8 }}
-                        className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-8"
+                        transition={{ duration: 1, ease: "easeOut" }}
+                        className="flex flex-col lg:flex-row items-center justify-center lg:justify-start gap-6 lg:gap-10 mb-12"
                     >
-                        <img
-                            src="/logos/ybvr_logo_light.png"
-                            alt="YBVR Logo"
-                            className="h-20 sm:h-28 lg:h-36 w-auto object-contain drop-shadow-[0_0_30px_rgba(0,224,255,0.3)]"
-                        />
-                        <span className="font-black text-4xl sm:text-5xl lg:text-7xl outfit tracking-widest mt-4 lg:mt-10">
+                        <div className="relative group">
+                            <div className="absolute -inset-4 bg-primary/20 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            <img
+                                src="/logos/ybvr_logo_light.png"
+                                alt="YBVR Logo"
+                                className="h-16 sm:h-20 lg:h-24 w-auto object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.1)] relative z-10"
+                            />
+                        </div>
+                        <div className="h-px w-12 lg:w-px lg:h-16 bg-white/10 hidden sm:block"></div>
+                        <span className="font-black text-5xl sm:text-6xl lg:text-8xl outfit tracking-[-0.05em] leading-none">
                             <span className="text-white">GU</span>
                             <span className="text-primary italic lowercase">ia</span>
                         </span>
                     </motion.div>
 
+                    <motion.h1
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.5, duration: 0.8 }}
+                        className="text-4xl sm:text-5xl lg:text-7xl font-black text-white outfit uppercase tracking-tighter leading-[0.9] mb-8 max-w-4xl mx-auto lg:mx-0"
+                    >
+                        {slides[currentSlide].title}
+                    </motion.h1>
+
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 1.1 }}
-                        className="text-xl sm:text-2xl lg:text-3xl text-white/90 font-light mb-12 max-w-2xl mx-auto lg:mx-0 leading-tight uppercase tracking-tight"
+                        transition={{ delay: 0.8, duration: 0.8 }}
+                        className="text-lg sm:text-xl lg:text-2xl text-slate-300 font-light mb-12 max-w-2xl mx-auto lg:mx-0 leading-relaxed tracking-wide"
                     >
-                        {slides[currentSlide].title}: <span className="text-primary font-bold">{slides[currentSlide].subtitle}</span>
+                        {slides[currentSlide].subtitle.includes(":") ? (
+                            <>
+                                {slides[currentSlide].subtitle.split(":")[0]}:
+                                <span className="text-primary font-semibold ml-2 inline-block relative">
+                                    {slides[currentSlide].subtitle.split(":")[1]}
+                                    <span className="absolute -bottom-1 left-0 w-full h-px bg-primary/30"></span>
+                                </span>
+                            </>
+                        ) : (
+                            <span className="text-primary font-semibold border-b border-primary/20 pb-1">
+                                {slides[currentSlide].subtitle}
+                            </span>
+                        )}
                     </motion.p>
 
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 1.4 }}
-                        className="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start"
+                        transition={{ delay: 1.1, duration: 0.8 }}
+                        className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start"
                     >
-                        <button className="bg-primary text-slate-950 px-12 py-5 rounded-2xl font-black text-sm uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-[0_0_40px_rgba(0,224,255,0.3)] flex items-center justify-center gap-3">
-                            {config.cta_primary} <ChevronRight className="w-5 h-5" />
+                        <button className="group bg-primary text-slate-950 px-12 py-5 rounded-2xl font-black text-sm uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-[0_20px_50px_rgba(0,224,255,0.2)] flex items-center justify-center gap-3">
+                            {config.cta_primary}
+                            <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                         </button>
                         <a
                             href="https://www.ybvr.com/about"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="glass text-white px-12 py-5 rounded-2xl font-bold text-sm uppercase tracking-widest hover:bg-white/10 active:scale-95 transition-all border-white/20 inline-block text-center flex items-center justify-center"
+                            className="glass text-white px-12 py-5 rounded-2xl font-bold text-sm uppercase tracking-widest hover:bg-white/10 active:scale-95 transition-all border-white/20 inline-block text-center flex items-center justify-center hover:border-primary/30"
                         >
                             {config.cta_secondary}
                         </a>
