@@ -107,11 +107,41 @@ export default function Hero() {
 
             <div className="relative z-10 w-full max-w-7xl mx-auto px-6 text-center lg:text-left">
                 <div className="max-w-4xl">
+                    {/* 1. Branding Capsule at Absolute Top */}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 1.2, ease: "easeOut" }}
+                        className="flex items-center justify-center lg:justify-start mb-6"
+                    >
+                        <div className="glass-capsule group relative flex items-center gap-6 px-8 py-3 rounded-2xl bg-white/[0.03] backdrop-blur-2xl border border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.3)] hover:border-primary/20 transition-all duration-500">
+                            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+
+                            <img
+                                src="/logos/ybvr_logo_light.png"
+                                alt="YBVR Logo"
+                                className="h-8 sm:h-10 w-auto object-contain opacity-90 group-hover:opacity-100 transition-all duration-300"
+                            />
+
+                            <div className="h-6 w-px bg-white/10 group-hover:bg-primary/20 transition-colors duration-500"></div>
+
+                            <span className="font-bold text-2xl sm:text-3xl lg:text-4xl outfit tracking-[0.1em] leading-none text-white uppercase flex items-center gap-1 group-hover:scale-[1.02] transition-transform duration-300">
+                                GU
+                                <span className="relative inline-block">
+                                    I
+                                    <span className="absolute -top-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary rounded-full shadow-[0_0_8px_#00E0FF]"></span>
+                                </span>
+                                A
+                            </span>
+                        </div>
+                    </motion.div>
+
+                    {/* 2. Marketing Tag below Branding */}
                     <motion.div
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.5 }}
-                        className="inline-flex items-center gap-3 px-4 py-2 rounded-full glass mb-6 border-primary/20"
+                        transition={{ delay: 0.3 }}
+                        className="inline-flex items-center gap-3 px-4 py-2 rounded-full glass mb-8 border-primary/20"
                     >
                         <span className="relative flex h-2 w-2">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
@@ -122,30 +152,7 @@ export default function Hero() {
                         </span>
                     </motion.div>
 
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
-                        className="flex items-center justify-center lg:justify-start mb-12"
-                    >
-                        <div className="glass-capsule group relative flex items-center gap-6 px-8 py-4 rounded-[2rem] bg-white/[0.03] backdrop-blur-2xl border border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.3),0_0_20px_rgba(0,224,255,0.05)] hover:border-primary/30 transition-all duration-500">
-                            {/* Inner Glow */}
-                            <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
 
-                            <img
-                                src="/logos/ybvr_logo_light.png"
-                                alt="YBVR Logo"
-                                className="h-10 sm:h-12 w-auto object-contain opacity-90 group-hover:opacity-100 transition-all duration-300"
-                            />
-
-                            <div className="h-8 w-px bg-white/10 group-hover:bg-primary/20 transition-colors duration-500"></div>
-
-                            <span className="font-black text-3xl sm:text-4xl lg:text-5xl outfit tracking-[-0.05em] leading-none group-hover:scale-[1.02] transition-transform duration-300">
-                                <span className="text-primary italic lowercase">gu</span>
-                                <span className="text-white uppercase">IA</span>
-                            </span>
-                        </div>
-                    </motion.div>
 
                     <motion.h1
                         initial={{ opacity: 0, y: 30 }}
