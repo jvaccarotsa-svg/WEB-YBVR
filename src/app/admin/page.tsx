@@ -184,6 +184,7 @@ export default function AdminDashboard() {
                     title: item.title,
                     alt_text: item.alt_text,
                     video_url: item.video_url,
+                    show_text: item.show_text ?? true,
                     order_index: index
                 }));
                 const { error: carouselError } = await supabase.from("carousel_items").insert(itemsToInsert);
@@ -327,13 +328,15 @@ export default function AdminDashboard() {
                 image_url: "https://lh3.googleusercontent.com/aida-public/AB6AXuAA7dXpDnrfa-UMICT3dOP03-28V5jaEoqrbViwcjwYyjHom6BMB7ja-3pCBYpZSNVSixj9dMRSbndQcv9qqoOy_HGHwILf7n2KmIKqWhcQdMosBriEWr6Jflw39hoMijdIV2oNOSVvC6FBWZh-ziKpsmt96o2TTllSWg3eLa02_CWSq5NZw-Oe46PVq-CJEFyGesBP_QRxJzb-GNVvyhAov2h3Pd5qBI5dlgUqGLDEKer2Kmcg06rIxvDbQ18gEWHHjHPEG9gU5zc",
                 alt_text: "Deep Tech & Healthcare",
                 title: "Optimización Crítica",
-                video_url: "Arquitectura de GUia para la excelencia operativa"
+                video_url: "Arquitectura de GUia para la excelencia operativa",
+                show_text: true
             },
             {
                 image_url: "https://lh3.googleusercontent.com/aida-public/AB6AXuDLoAfmhoQ6uZ0mMG78dWF1fSiT_loTuZKWBKBVUYDXbHsrCu-yL0KOScxbsGet8HNV_LFfd362sME-KIWa8pzSRZQJ_erDvSix5jYkVm0_eYYZTriT5UC8eCMBI3xeKxrw45ApBprHZ8bXjXR92GfvDjl37ZJAXFXwFucekfV-dmXiG-eqUQhPpbW6vmdC9jRQJAASRW0P8TM5ecfrtzius3cDw45Mn37CbN_ry7MgCy053U9yWoTHe5sIZndHvuADO7log2qaFBg",
                 alt_text: "Interactive Visualization",
                 title: "Impacto Visual",
-                video_url: "Soluciones inmersivas que transforman datos en decisiones"
+                video_url: "Soluciones inmersivas que transforman datos en decisiones",
+                show_text: true
             }
         ];
         setCarouselItems(defaultSlides);
@@ -390,7 +393,7 @@ export default function AdminDashboard() {
         setPartners(["Google", "Teknon", "B Braun", "Apple", "Zeiss", "Novartis", "Pfizer", "Bayer"].map(name => ({ name, logo_url: "", website_url: "" })));
     };
 
-    const addCarouselItem = () => setCarouselItems([...carouselItems, { image_url: "", title: "", alt_text: "" }]);
+    const addCarouselItem = () => setCarouselItems([...carouselItems, { image_url: "", title: "", alt_text: "", show_text: true }]);
     const removeCarouselItem = (index: number) => setCarouselItems(carouselItems.filter((_, i) => i !== index));
 
     const addStory = () => setSuccessStories([...successStories, { title: "Nuevo Caso", category: "Pharma", image_url: "", video_url: "" }]);
@@ -586,6 +589,23 @@ export default function AdminDashboard() {
                                                             }}
                                                             className="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:border-primary outline-none"
                                                         />
+
+                                                        <div className="flex items-center gap-3 py-2">
+                                                            <input
+                                                                type="checkbox"
+                                                                id={`show_text_${i}`}
+                                                                checked={item.show_text !== false}
+                                                                onChange={(e) => {
+                                                                    const newItems = [...carouselItems];
+                                                                    newItems[i].show_text = e.target.checked;
+                                                                    setCarouselItems(newItems);
+                                                                }}
+                                                                className="w-4 h-4 rounded border-slate-800 bg-slate-900 text-primary focus:ring-primary/20"
+                                                            />
+                                                            <label htmlFor={`show_text_${i}`} className="text-xs font-medium text-slate-400 cursor-pointer select-none">
+                                                                Mostrar superposición de texto (Título/Tag)
+                                                            </label>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
