@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 
 export default function Partners() {
-    const [partnersList, setPartnersList] = useState<string[]>([]);
+    const [partnersList, setPartnersList] = useState<any[]>([]);
     const [config, setConfig] = useState({
         title: "Clientes",
         subtitle: "Nuestros Cimientos"
@@ -16,13 +16,19 @@ export default function Partners() {
             // Fetch partners
             const { data: partnersData } = await supabase
                 .from("partners")
-                .select("name")
+                .select("name, logo_url, website_url")
                 .order("created_at", { ascending: true });
 
             if (partnersData && partnersData.length > 0) {
-                setPartnersList(partnersData.map(p => p.name));
+                setPartnersList(partnersData.map(p => ({
+                    name: p.name,
+                    logo: p.logo_url,
+                    url: p.website_url
+                })));
             } else {
-                setPartnersList(["Google", "Teknon", "B Braun", "Apple", "Zeiss", "Novartis", "Pfizer", "Bayer"]);
+                // Default fallback partners
+                const defaults = ["Google", "Teknon", "B Braun", "Apple", "Zeiss", "Novartis", "Pfizer", "Bayer"];
+                setPartnersList(defaults.map(name => ({ name, logo: null, url: null })));
             }
 
             // Fetch config
@@ -72,14 +78,41 @@ export default function Partners() {
 
                 <div className="logo-scroll py-10">
                     <div className="flex items-center gap-24 px-12">
-                        {displayPartners.map((name, idx) => (
-                            <div
-                                key={idx}
-                                className="text-3xl sm:text-4xl font-black text-white/20 hover:text-white transition-all duration-500 uppercase tracking-widest outfit cursor-default whitespace-nowrap"
-                            >
-                                {name}
-                            </div>
-                        ))}
+                        {displayPartners.map((partner, idx) => {
+                            const content = (
+                                <div className="flex flex-col items-center gap-2 group/logo">
+                                    {partner.logo ? (
+                                        <div className="h-12 sm:h-16 w-auto flex items-center justify-center grayscale opacity-40 group-hover/logo:grayscale-0 group-hover/logo:opacity-100 transition-all duration-500 transform group-hover/logo:scale-110">
+                                            <img
+                                                src={partner.logo}
+                                                alt={partner.name}
+                                                className="max-h-full w-auto object-contain"
+                                            />
+                                        </div>
+                                    ) : (
+                                        <div className="text-3xl sm:text-4xl font-black text-white/20 hover:text-white transition-all duration-500 uppercase tracking-widest outfit cursor-default whitespace-nowrap">
+                                            {partner.name}
+                                        </div>
+                                    )}
+                                </div>
+                            );
+
+                            if (partner.url) {
+                                return (
+                                    <a
+                                        key={idx}
+                                        href={partner.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="transition-transform duration-300 hover:z-20"
+                                    >
+                                        {content}
+                                    </a>
+                                );
+                            }
+
+                            return <div key={idx}>{content}</div>;
+                        })}
                     </div>
                 </div>
             </div>
