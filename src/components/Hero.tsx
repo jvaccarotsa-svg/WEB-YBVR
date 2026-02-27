@@ -12,14 +12,18 @@ export default function Hero() {
             tag: "Deep Tech & Healthcare",
             title: "Optimización Crítica",
             subtitle: "Arquitectura de GUia para la excelencia operativa",
-            showText: true
+            showText: true,
+            fontSize: "text-4xl",
+            fontWeight: "font-extralight"
         },
         {
             image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDLoAfmhoQ6uZ0mMG78dWF1fSiT_loTuZKWBKBVUYDXbHsrCu-yL0KOScxbsGet8HNV_LFfd362sME-KIWa8pzSRZQJ_erDvSix5jYkVm0_eYYZTriT5UC8eCMBI3xeKxrw45ApBprHZ8bXjXR92GfvDjl37ZJAXFXwFucekfV-dmXiG-eqUQhPpbW6vmdC9jRQJAASRW0P8TM5ecfrtzius3cDw45Mn37CbN_ry7MgCy053U9yWoTHe5sIZndHvuADO7log2qaFBg",
             tag: "Interactive Visualization",
             title: "Impacto Visual",
             subtitle: "Soluciones inmersivas que transforman datos en decisiones",
-            showText: true
+            showText: true,
+            fontSize: "text-4xl",
+            fontWeight: "font-extralight"
         }
     ];
 
@@ -54,7 +58,9 @@ export default function Hero() {
                         tag: item.alt_text || "YBVR GUia",
                         title: item.title || "Innovación",
                         subtitle: item.video_url || "",
-                        showText: item.show_text !== false
+                        showText: item.show_text !== false,
+                        fontSize: item.title_font_size || 'text-4xl',
+                        fontWeight: item.title_font_weight || 'font-extralight'
                     })));
                 }
             }
@@ -159,12 +165,21 @@ export default function Hero() {
                         >
                             <div className="absolute -inset-1 bg-primary/10 rounded-[2.5rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
                             <div className="relative px-6 sm:px-10 py-5 rounded-[2.5rem] bg-white/[0.01] backdrop-blur-xl border border-white/10 shadow-3xl">
-                                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extralight outfit uppercase tracking-[0.15em] leading-[1.1] text-white">
-                                    {slides[currentSlide].title.split(" ").map((word, idx) => (
-                                        <span key={idx} className={idx === 0 || word.includes("IA") || word.includes("CRÍTICA") || idx > 3 ? "text-primary font-normal" : "text-white/90"}>
-                                            {word}{" "}
-                                        </span>
-                                    ))}
+                                <h1 className={`${slides[currentSlide].fontSize} ${slides[currentSlide].fontWeight} outfit uppercase tracking-[0.15em] leading-[1.1] text-white`}>
+                                    {slides[currentSlide].title.split(" ").map((word, idx) => {
+                                        const isHighlighted = idx === 0 || word.includes("IA") || word.includes("CRÍTICA") || idx > 3;
+                                        // If weight is font-thin or font-extralight, make highlighted words slightly bolder (normal) for contrast
+                                        // Otherwise, keep it standard normal or bold as per the current selection
+                                        const highlightWeight = slides[currentSlide].fontWeight.includes('thin') || slides[currentSlide].fontWeight.includes('extralight')
+                                            ? 'font-normal'
+                                            : 'font-bold';
+
+                                        return (
+                                            <span key={idx} className={isHighlighted ? `text-primary ${highlightWeight}` : "text-white/90"}>
+                                                {word}{" "}
+                                            </span>
+                                        );
+                                    })}
                                 </h1>
                             </div>
                         </motion.div>

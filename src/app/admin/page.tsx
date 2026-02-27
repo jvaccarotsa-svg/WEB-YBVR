@@ -185,6 +185,8 @@ export default function AdminDashboard() {
                     alt_text: item.alt_text,
                     video_url: item.video_url,
                     show_text: item.show_text ?? true,
+                    title_font_size: item.title_font_size || 'text-4xl',
+                    title_font_weight: item.title_font_weight || 'font-extralight',
                     order_index: index
                 }));
                 const { error: carouselError } = await supabase.from("carousel_items").insert(itemsToInsert);
@@ -603,8 +605,50 @@ export default function AdminDashboard() {
                                                                 className="w-4 h-4 rounded border-slate-800 bg-slate-900 text-primary focus:ring-primary/20"
                                                             />
                                                             <label htmlFor={`show_text_${i}`} className="text-xs font-medium text-slate-400 cursor-pointer select-none">
-                                                                Mostrar superposición de texto (Título/Tag)
+                                                                Mostrar texto
                                                             </label>
+                                                        </div>
+
+                                                        {/* Typography Controls */}
+                                                        <div className="grid grid-cols-2 gap-4 pb-2">
+                                                            <div className="space-y-1">
+                                                                <label className="text-[10px] uppercase tracking-wider font-bold text-slate-500">Tamaño Título</label>
+                                                                <select
+                                                                    value={item.title_font_size || "text-4xl"}
+                                                                    onChange={(e) => {
+                                                                        const newItems = [...carouselItems];
+                                                                        newItems[i].title_font_size = e.target.value;
+                                                                        setCarouselItems(newItems);
+                                                                    }}
+                                                                    className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2 py-1.5 text-xs text-white outline-none focus:border-primary transition-colors"
+                                                                >
+                                                                    <option value="text-xl">Extra Pequeño</option>
+                                                                    <option value="text-2xl">Pequeño</option>
+                                                                    <option value="text-3xl">Medio-Pequeño</option>
+                                                                    <option value="text-4xl">Normal (4xl)</option>
+                                                                    <option value="text-5xl">Grande (5xl)</option>
+                                                                    <option value="text-6xl">Extra Grande</option>
+                                                                </select>
+                                                            </div>
+                                                            <div className="space-y-1">
+                                                                <label className="text-[10px] uppercase tracking-wider font-bold text-slate-500">Grosor Título</label>
+                                                                <select
+                                                                    value={item.title_font_weight || "font-extralight"}
+                                                                    onChange={(e) => {
+                                                                        const newItems = [...carouselItems];
+                                                                        newItems[i].title_font_weight = e.target.value;
+                                                                        setCarouselItems(newItems);
+                                                                    }}
+                                                                    className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2 py-1.5 text-xs text-white outline-none focus:border-primary transition-colors"
+                                                                >
+                                                                    <option value="font-thin">Muy Fino (Thin)</option>
+                                                                    <option value="font-extralight">Fino (ExtraLight)</option>
+                                                                    <option value="font-light">Ligero (Light)</option>
+                                                                    <option value="font-normal">Normal</option>
+                                                                    <option value="font-medium">Medio</option>
+                                                                    <option value="font-bold">Negrita</option>
+                                                                </select>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
