@@ -158,8 +158,8 @@ export default function Hero() {
                             className="relative mb-10 group"
                         >
                             <div className="absolute -inset-1 bg-primary/10 rounded-[2.5rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
-                            <div className="relative px-6 sm:px-10 py-6 rounded-[2.5rem] bg-white/[0.01] backdrop-blur-xl border border-white/10 shadow-3xl">
-                                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extralight outfit uppercase tracking-[0.15em] leading-[1.1] text-white">
+                            <div className="relative px-6 sm:px-10 py-5 rounded-[2.5rem] bg-white/[0.01] backdrop-blur-xl border border-white/10 shadow-3xl">
+                                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extralight outfit uppercase tracking-[0.15em] leading-[1.1] text-white">
                                     {slides[currentSlide].title.split(" ").map((word, idx) => (
                                         <span key={idx} className={idx === 0 || word.includes("IA") || word.includes("CRÍTICA") || idx > 3 ? "text-primary font-normal" : "text-white/90"}>
                                             {word}{" "}
