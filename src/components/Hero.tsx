@@ -110,66 +110,64 @@ export default function Hero() {
 
             <div className="relative z-10 w-full max-w-7xl mx-auto px-6 text-center lg:text-left">
                 <div className="max-w-4xl">
-                    {/* 1. Branding Capsule at Absolute Top */}
+                    {/* 1. Integrated Branding & Tag Header */}
                     {slides[currentSlide].showText !== false && (
                         <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 1.2, ease: "easeOut" }}
-                            className="flex items-center justify-center lg:justify-start mb-6"
+                            initial={{ opacity: 0, y: -20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 1, ease: "easeOut" }}
+                            className="flex flex-col gap-6 mb-10 items-center lg:items-start"
                         >
-                            <div className="glass-capsule group relative flex items-center gap-6 px-8 py-3 rounded-2xl bg-white/[0.03] backdrop-blur-2xl border border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.3)] hover:border-primary/20 transition-all duration-500">
-                                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                            {/* Unified Branding Capsule */}
+                            <div className="flex items-center gap-8 px-10 py-4 rounded-3xl bg-white/[0.02] backdrop-blur-3xl border border-white/5 shadow-2xl relative overflow-hidden group hover:border-primary/20 transition-all duration-700">
+                                <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
 
-                                <img
-                                    src="/logos/ybvr_logo_light.png"
-                                    alt="YBVR Logo"
-                                    className="h-8 sm:h-10 w-auto object-contain opacity-90 group-hover:opacity-100 transition-all duration-300"
-                                />
+                                <img src="/logos/ybvr_logo_light.png" alt="YBVR" className="h-6 sm:h-7 opacity-80 group-hover:opacity-100 transition-opacity" />
 
-                                <div className="h-6 w-px bg-white/10 group-hover:bg-primary/20 transition-colors duration-500"></div>
+                                <div className="w-px h-6 bg-white/10"></div>
 
-                                <span className="font-bold text-2xl sm:text-3xl lg:text-4xl outfit tracking-[0.1em] leading-none text-white uppercase flex items-center gap-1 group-hover:scale-[1.02] transition-transform duration-300">
+                                <span className="text-white font-bold tracking-[0.25em] text-xl sm:text-2xl flex items-center gap-1.5 outfit uppercase">
                                     GU
-                                    <span className="relative inline-block">
+                                    <span className="relative flex items-center">
                                         I
-                                        <span className="absolute -top-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary rounded-full shadow-[0_0_8px_#00E0FF]"></span>
+                                        <span className="absolute -top-1 left-1/2 -track-x-1/2 w-1 h-1 bg-primary rounded-full shadow-[0_0_10px_#00E0FF]"></span>
                                     </span>
                                     A
+                                </span>
+                            </div>
+
+                            {/* Slim Marketing Tag */}
+                            <div className="flex items-center gap-3 px-5 py-2 rounded-full bg-slate-950/40 backdrop-blur-md border border-white/5">
+                                <span className="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_8px_#00E0FF]"></span>
+                                <span className="text-primary text-[10px] sm:text-xs font-bold uppercase tracking-[0.4em] outfit">
+                                    {slides[currentSlide].tag}
                                 </span>
                             </div>
                         </motion.div>
                     )}
 
-                    {/* 2. Marketing Tag below Branding */}
+
+
+
+                    {/* 2. Main Title in Glassmorphism Frame */}
                     {slides[currentSlide].showText !== false && (
                         <motion.div
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.3 }}
-                            className="inline-flex items-center gap-3 px-4 py-2 rounded-full glass mb-8 border-primary/20"
+                            initial={{ opacity: 0, scale: 0.98 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.4, duration: 1 }}
+                            className="relative mb-10 group"
                         >
-                            <span className="relative flex h-2 w-2">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-                            </span>
-                            <span className="text-primary text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em]">
-                                {slides[currentSlide].tag}
-                            </span>
+                            <div className="absolute -inset-1 bg-primary/10 rounded-[2.5rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
+                            <div className="relative px-8 sm:px-12 py-10 rounded-[2.5rem] bg-white/[0.01] backdrop-blur-xl border border-white/10 shadow-3xl">
+                                <h1 className="text-4xl sm:text-6xl lg:text-7xl font-light outfit uppercase tracking-[0.03em] leading-[1.05] text-white">
+                                    {slides[currentSlide].title.split(" ").map((word, idx) => (
+                                        <span key={idx} className={idx === 0 || word.includes("IA") || word.includes("CRÍTICA") || idx > 3 ? "text-primary font-medium" : "text-white/90"}>
+                                            {word}{" "}
+                                        </span>
+                                    ))}
+                                </h1>
+                            </div>
                         </motion.div>
-                    )}
-
-
-
-                    {slides[currentSlide].showText !== false && (
-                        <motion.h1
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.5, duration: 0.8 }}
-                            className="text-4xl sm:text-5xl lg:text-6xl font-bold pb-2 text-transparent bg-clip-text bg-gradient-to-b from-white/90 via-white/50 to-white/20 outfit uppercase tracking-[0.02em] leading-[0.95] mb-8 max-w-4xl mx-auto lg:mx-0"
-                        >
-                            {slides[currentSlide].title}
-                        </motion.h1>
                     )}
 
                     {slides[currentSlide].showText !== false && (
@@ -177,21 +175,9 @@ export default function Hero() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.8, duration: 0.8 }}
-                            className="text-lg sm:text-xl lg:text-2xl text-slate-300 font-light mb-12 max-w-2xl mx-auto lg:mx-0 leading-relaxed tracking-wide"
+                            className="text-lg sm:text-xl lg:text-2xl text-slate-300 font-light mb-12 max-w-3xl mx-auto lg:mx-0 leading-relaxed tracking-wide outfit"
                         >
-                            {slides[currentSlide].subtitle.includes(":") ? (
-                                <>
-                                    {slides[currentSlide].subtitle.split(":")[0]}:
-                                    <span className="text-primary font-semibold ml-2 inline-block relative">
-                                        {slides[currentSlide].subtitle.split(":")[1]}
-                                        <span className="absolute -bottom-1 left-0 w-full h-px bg-primary/30"></span>
-                                    </span>
-                                </>
-                            ) : (
-                                <span className="text-primary font-semibold border-b border-primary/20 pb-1">
-                                    {slides[currentSlide].subtitle}
-                                </span>
-                            )}
+                            {slides[currentSlide].subtitle}
                         </motion.p>
                     )}
 
@@ -199,17 +185,21 @@ export default function Hero() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 1.1, duration: 0.8 }}
-                        className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start"
+                        className="flex flex-col sm:flex-row gap-8 justify-center lg:justify-start"
                     >
-                        <button className="group bg-primary text-slate-950 px-12 py-5 rounded-2xl font-black text-sm uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-[0_20px_50px_rgba(0,224,255,0.2)] flex items-center justify-center gap-3">
-                            {config.cta_primary}
-                            <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                        <button className="group relative bg-primary text-slate-950 px-14 py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:scale-[1.05] active:scale-95 transition-all shadow-[0_0_40px_rgba(0,224,255,0.3)] flex items-center justify-center gap-4 overflow-hidden">
+                            <span className="relative z-10 flex items-center gap-2">
+                                {config.cta_primary}
+                                <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                            </span>
+                            <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity"></div>
                         </button>
+
                         <a
                             href="https://www.ybvr.com/about"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="glass text-white px-12 py-5 rounded-2xl font-bold text-sm uppercase tracking-widest hover:bg-white/10 active:scale-95 transition-all border-white/20 inline-block text-center flex items-center justify-center hover:border-primary/30"
+                            className="group px-14 py-5 rounded-2xl font-bold text-xs uppercase tracking-[0.2em] bg-slate-950/40 backdrop-blur-md border border-white/10 text-white hover:bg-white/5 hover:border-white/20 transition-all flex items-center justify-center"
                         >
                             {config.cta_secondary}
                         </a>
