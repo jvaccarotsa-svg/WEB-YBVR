@@ -294,6 +294,7 @@ export default function AdminDashboard() {
                 if (insertError) throw insertError;
             }
             setStatus({ type: "success", message: "Clientes guardados" });
+            fetchData();
         } catch (error: any) {
             console.error(error);
             setStatus({ type: "error", message: `Error: ${error.message || "Error al guardar clientes"}` });

@@ -50,8 +50,10 @@ export default function Partners() {
         fetchData();
     }, []);
 
-    // Duplicate list for infinite scroll effect if needed
-    const displayPartners = partnersList.length > 0 ? [...partnersList, ...partnersList, ...partnersList] : [];
+    // For infinite scroll, we need enough items to fill the screen and overlap
+    // If the list is very short (e.g. 1-2 items), we repeat it many times
+    const duplicateCount = partnersList.length <= 2 ? 10 : (partnersList.length <= 5 ? 6 : 4);
+    const displayPartners = partnersList.length > 0 ? Array(duplicateCount).fill(partnersList).flat() : [];
 
     return (
         <section className="py-24 bg-background-dark border-y border-white/5 overflow-hidden">
@@ -76,44 +78,42 @@ export default function Partners() {
                 <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-background-dark to-transparent z-10"></div>
                 <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-background-dark to-transparent z-10"></div>
 
-                <div className="logo-scroll py-10">
-                    <div className="flex items-center gap-24 px-12">
-                        {displayPartners.map((partner, idx) => {
-                            const content = (
-                                <div className="flex flex-col items-center gap-2 group/logo">
-                                    {partner.logo ? (
-                                        <div className="h-12 sm:h-16 w-auto flex items-center justify-center grayscale opacity-40 group-hover/logo:grayscale-0 group-hover/logo:opacity-100 transition-all duration-500 transform group-hover/logo:scale-110">
-                                            <img
-                                                src={partner.logo}
-                                                alt={partner.name}
-                                                className="max-h-full w-auto object-contain"
-                                            />
-                                        </div>
-                                    ) : (
-                                        <div className="text-3xl sm:text-4xl font-black text-white/20 hover:text-white transition-all duration-500 uppercase tracking-widest outfit cursor-default whitespace-nowrap">
-                                            {partner.name}
-                                        </div>
-                                    )}
-                                </div>
+                <div className="logo-scroll items-center gap-24 px-12 py-10">
+                    {displayPartners.map((partner, idx) => {
+                        const content = (
+                            <div className="flex flex-col items-center gap-2 group/logo">
+                                {partner.logo ? (
+                                    <div className="h-12 sm:h-16 w-auto flex items-center justify-center grayscale opacity-40 group-hover/logo:grayscale-0 group-hover/logo:opacity-100 transition-all duration-500 transform group-hover/logo:scale-110">
+                                        <img
+                                            src={partner.logo}
+                                            alt={partner.name}
+                                            className="max-h-full w-auto object-contain"
+                                        />
+                                    </div>
+                                ) : (
+                                    <div className="text-3xl sm:text-4xl font-black text-white/20 hover:text-white transition-all duration-500 uppercase tracking-widest outfit cursor-default whitespace-nowrap">
+                                        {partner.name}
+                                    </div>
+                                )}
+                            </div>
+                        );
+
+                        if (partner.url) {
+                            return (
+                                <a
+                                    key={idx}
+                                    href={partner.url.startsWith('http') ? partner.url : `https://${partner.url}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="block transition-transform duration-300 hover:z-20 shrink-0"
+                                >
+                                    {content}
+                                </a>
                             );
+                        }
 
-                            if (partner.url) {
-                                return (
-                                    <a
-                                        key={idx}
-                                        href={partner.url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="transition-transform duration-300 hover:z-20"
-                                    >
-                                        {content}
-                                    </a>
-                                );
-                            }
-
-                            return <div key={idx}>{content}</div>;
-                        })}
-                    </div>
+                        return <div key={idx} className="shrink-0">{content}</div>;
+                    })}
                 </div>
             </div>
         </section>
