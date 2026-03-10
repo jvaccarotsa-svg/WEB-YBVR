@@ -54,5 +54,5 @@ body {
 .logo-scroll {
   display: flex;
   width: fit-content;
-  animation: scroll 120s linear infinite;
+  animation: scroll 200s linear infinite;
 }

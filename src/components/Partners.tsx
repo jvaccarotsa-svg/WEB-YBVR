@@ -114,29 +114,29 @@ export default function Partners() {
                 <div className="absolute inset-y-0 left-0 w-32 md:w-64 bg-gradient-to-r from-white to-transparent z-10 md:opacity-100 opacity-0"></div>
                 <div className="absolute inset-y-0 right-0 w-32 md:w-64 bg-gradient-to-l from-white to-transparent z-10 md:opacity-100 opacity-0"></div>
 
-                <div className="logo-scroll items-center gap-48 px-12 py-16">
+                <div className="logo-scroll items-center gap-48 px-12 py-8">
                     {displayPartners.map((partner, idx) => {
                         const isVideo = isYoutubeUrl(partner.url);
 
                         const content = (
                             <div className="flex flex-col items-center gap-2 group/logo relative">
                                 {partner.logo ? (
-                                    <div className="h-40 sm:h-48 w-80 sm:w-96 flex items-center justify-center grayscale-0 opacity-100 group-hover/logo:scale-110 transition-all duration-500 relative">
+                                    <div className="h-24 sm:h-28 w-64 sm:w-72 flex items-center justify-center grayscale-0 opacity-100 group-hover/logo:scale-110 transition-all duration-500 relative">
                                         <img
                                             src={partner.logo}
                                             alt={partner.name}
-                                            className="max-h-[85%] w-auto object-contain"
+                                            className="h-[80%] w-auto object-contain"
                                         />
                                         {isVideo && (
                                             <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/logo:opacity-100 transition-opacity duration-300">
-                                                <div className="w-16 h-16 rounded-full glass border-primary/40 flex items-center justify-center shadow-[0_0_20px_rgba(0,224,255,0.4)]">
-                                                    <Play className="w-6 h-6 text-primary fill-primary ml-0.5" />
+                                                <div className="w-12 h-12 rounded-full glass border-primary/40 flex items-center justify-center shadow-[0_0_20px_rgba(0,224,255,0.4)]">
+                                                    <Play className="w-5 h-5 text-primary fill-primary ml-0.5" />
                                                 </div>
                                             </div>
                                         )}
                                     </div>
                                 ) : (
-                                    <div className="h-40 sm:h-48 w-80 sm:w-96 flex items-center justify-center text-4xl sm:text-5xl font-black text-slate-800 hover:text-primary transition-all duration-500 uppercase tracking-widest outfit cursor-default whitespace-nowrap group-hover/logo:scale-110">
+                                    <div className="h-24 sm:h-28 w-64 sm:w-72 flex items-center justify-center text-3xl sm:text-4xl font-black text-slate-800 hover:text-primary transition-all duration-500 uppercase tracking-widest outfit cursor-default whitespace-nowrap group-hover/logo:scale-110">
                                         {partner.name}
                                     </div>
                                 )}
