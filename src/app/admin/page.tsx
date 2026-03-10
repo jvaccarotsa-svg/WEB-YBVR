@@ -925,9 +925,10 @@ export default function AdminDashboard() {
                                                 }}
                                                 className="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 text-xs focus:border-primary outline-none mb-2 text-center"
                                             />
+                                            <label className="text-[10px] font-bold text-slate-600 uppercase mb-1">Video YouTube / Website URL</label>
                                             <input
                                                 type="text"
-                                                placeholder="Website URL"
+                                                placeholder="Ej: https://youtube.com/watch?v=... o https://empresa.com"
                                                 value={partner.website_url || ""}
                                                 onChange={(e) => {
                                                     const n = [...partners]; n[i].website_url = e.target.value; setPartners(n);
